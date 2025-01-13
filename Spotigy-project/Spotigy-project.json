@@ -1,0 +1,41 @@
+{
+  "name" : "Spotigy-project",
+  "jobMode" : "VISUAL",
+  "description" : "",
+  "role" : "arn:aws:iam::376129850324:role/glue_access_s3",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-376129850324-us-east-2/scripts/Spotigy-project.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-376129850324-us-east-2/sparkHistoryLogs/",
+    "--enable-job-insights" : "true",
+    "--enable-observability-metrics" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-376129850324-us-east-2/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 5,
+  "timeout" : 480,
+  "maxCapacity" : 5.0,
+  "glueVersion" : "5.0",
+  "numberOfWorkers" : 5,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1736737981913\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://spotify-project-data-engineering/staging/track.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"Tracks\",\"OptimizePerformance\":false,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"track_id\",\"Type\":\"string\"},{\"Name\":\"track_popularity\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://spotify-project-data-engineering/staging/track.csv\"],\"QuoteChar\":\"quote\",\"Recurse\":true,\"Separator\":\"comma\",\"WithHeader\":true}},\"node-1736738269337\":{\"Join\":{\"Columns\":[{\"From\":\"node-1736737981355\",\"Keys\":[[\"artist_id\"]]},{\"From\":\"node-1736737981754\",\"Keys\":[[\"id\"]]}],\"Inputs\":[\"node-1736737981355\",\"node-1736737981754\"],\"JoinType\":\"equijoin\",\"Name\":\"Join Albums and artists\"}},\"node-1736738338709\":{\"DropFields\":{\"Inputs\":[\"node-1736738306485\"],\"Name\":\"Drop Fields\",\"Paths\":[[\".track_id\"],[\"id\"]]}},\"node-1736738361408\":{\"S3GlueParquetTarget\":{\"AutoDataQuality\":{\"EvaluationContext\":\"EvaluateDataQuality_node1736737977522\",\"IsEnabled\":true},\"Compression\":\"snappy\",\"Inputs\":[\"node-1736738338709\"],\"Name\":\"Destination\",\"PartitionKeys\":[],\"Path\":\"s3://spotify-project-data-engineering/datawarehouse/\",\"SchemaChangePolicy\":{\"EnableUpdateCatalog\":false}}},\"node-1736737981355\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://spotify-project-data-engineering/staging/albums.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"Albums\",\"OptimizePerformance\":false,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"track_name\",\"Type\":\"string\"},{\"Name\":\"track_id\",\"Type\":\"string\"},{\"Name\":\"duration_ms\",\"Type\":\"string\"},{\"Name\":\"album_name\",\"Type\":\"string\"},{\"Name\":\"release_date\",\"Type\":\"string\"},{\"Name\":\"label\",\"Type\":\"string\"},{\"Name\":\"album_popularity\",\"Type\":\"string\"},{\"Name\":\"album_id\",\"Type\":\"string\"},{\"Name\":\"artist_id\",\"Type\":\"string\"},{\"Name\":\"duration_sec\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://spotify-project-data-engineering/staging/albums.csv\"],\"QuoteChar\":\"quote\",\"Recurse\":true,\"Separator\":\"comma\",\"WithHeader\":true}},\"node-1736737981754\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://spotify-project-data-engineering/staging/artists.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"Artists\",\"OptimizePerformance\":false,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"id\",\"Type\":\"string\"},{\"Name\":\"name\",\"Type\":\"string\"},{\"Name\":\"artist_popularity\",\"Type\":\"string\"},{\"Name\":\"followers\",\"Type\":\"string\"},{\"Name\":\"genre\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://spotify-project-data-engineering/staging/artists.csv\"],\"QuoteChar\":\"quote\",\"Recurse\":true,\"Separator\":\"comma\",\"WithHeader\":true}},\"node-1736738306485\":{\"Join\":{\"Columns\":[{\"From\":\"node-1736737981913\",\"Keys\":[[\"track_id\"]]},{\"From\":\"node-1736738269337\",\"Keys\":[[\"track_id\"]]}],\"Inputs\":[\"node-1736737981913\",\"node-1736738269337\"],\"JoinType\":\"equijoin\",\"Name\":\"Join with tracks\"}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "spotify-aws",
+    "branch" : "main",
+    "folder" : "Spotigy-project"
+  }
+}
